@@ -1,0 +1,14 @@
+#!/bin/sh
+
+modified=`git diff-index --name-only HEAD`
+
+for f in $modified; do
+    if [[ ( -e $f ) && ( $f == *.pl || $f == *.pm || $f == *.t ) ]]; then
+        perl -wc $f
+        if [ $? != 0 ]; then
+            echo "Code fails perl syntax check."
+            exit 1
+        fi
+    fi
+done
+exit
